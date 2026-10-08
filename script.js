@@ -3,13 +3,24 @@
 const choices = ['rock', 'paper', 'scissors'];
 
 function getComputerChoice(){
-    return choices[Math.floor(Math.random() * choices.length)]
+    return choices[Math.floor(Math.random() * choices.length)];
 }
 
 
 function getHumanChoice (){
     
-    let choice  = prompt('what is your choice')
+    // let choice  = prompt('what is your choice').toLowerCase()
+
+    // if (choices.includes(choice)){
+    //     return choice;
+    // } else {
+    //     // choice = prompt('Enter valid choice;')
+    // }
+    let choice = prompt('Enter a valid choice').toLowerCase();
+
+    while (!choices.includes(choice)){
+        choice = prompt('Please enter a valid choice').toLowerCase();
+    }
 
     return choice
    
@@ -17,19 +28,19 @@ function getHumanChoice (){
 
 
 
+
 function playRound(computerSelection, humanSelection){
-    if (computerSelection === 'paper' && humanSelection === 'rock' ||
+    if (computerSelection === humanSelection){
+        return 'draw'
+    }
+    else if (computerSelection === 'paper' && humanSelection === 'rock' ||
         computerSelection === 'scissors' && humanSelection === 'paper' ||
         computerSelection === 'rock' && humanSelection === 'scissors'
      ) {
-        return 'Computer has won this round'
-     } else if (humanSelection === 'paper' && computerSelection === 'rock' ||
-        humanSelection === 'scissors' && computerSelection === 'paper' ||
-        humanSelection === 'rock' && computerSelection === 'scissors') {
-        return 'The human has won this round'
-     } else if (computerSelection === humanSelection){
-        return 'Draw, try again'
-     }
+        return 'computer'
+     } else {
+        return 'human'
+     } 
 }
 
 
@@ -41,15 +52,26 @@ function playGame() {
     let computerScore = 0;
     const totalRounds = 5;
     for (let i = 0; i < totalRounds; i++){
-        let winner = playRound(getComputerChoice(),getHumanChoice())
-        if (winner.includes('human')){
+        const hChoice = getHumanChoice();
+        const botChoice = getComputerChoice();
+        const winner = playRound(botChoice,hChoice)
+        
+        if (winner === 'human'){
             humanScore++;
-        } else if (winner.includes('Computer')){
+        } else if (winner === 'computer'){
             computerScore++;
         }
+
+        console.log(`
+            Round ${i + 1}. 
+            Human : ${hChoice}
+            Computer : ${botChoice}
+            Winner : ${winner.toUpperCase()}
+            `)
     }
 
-    return `Round Score:
+    return `
+            Final Score after ${totalRounds} rounds:
             Computer Score: ${computerScore}
             Human Score : ${humanScore}`
 
